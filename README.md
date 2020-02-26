@@ -8,6 +8,8 @@ The code was written in MATLAB and tested on Ubuntu 14.04 LTS.
 
 Contacting information: 
 Hiromasa Takemura
-Center for Information and Neural Networks (CiNet)
+
+Center for Information and Neural Networks (CiNet),
 National Institute of Information and Communications Technology
+
 htakemur@nict.go.jp
