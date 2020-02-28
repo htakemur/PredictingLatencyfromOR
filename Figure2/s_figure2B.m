@@ -42,7 +42,7 @@ h1.ylim(2) = 100; % Y axis, the maximum limit
 
 % Set tick label
 xtick = [60 80 100];
-ytick = [60 80 100];%degree
+ytick = [60 80 100];
 
 % Draw scatter plot
 fig = figure;
