@@ -9,6 +9,7 @@ function s_figure2B
 
 % Hiromasa Takemura, NICT CiNet BIT
 
+% Load Test-Retest Latency data
 load ../Data/C1_latency_testretest.mat
 
 % Find C1 peak latency data in high contrast, lower visual field (odd
