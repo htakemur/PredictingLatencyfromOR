@@ -6,6 +6,8 @@ Takemura, H., Yuasa, K. & Amano, K. (under review) Predicting neural response la
 
 The code was written in MATLAB and tested on Ubuntu 14.04 LTS. 
 
+Dependency: MATLAB Statistics and Machine Learning Toolbox.
+
 Contacting information: 
 Hiromasa Takemura
 
