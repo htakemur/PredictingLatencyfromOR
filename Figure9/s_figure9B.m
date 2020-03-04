@@ -25,6 +25,7 @@ index_mean_RH(:,5) = (mean(all_profile.icvf1(11:90,:),1) + mean(all_profile.icvf
 % Use right OR data for predicting C1 peak latency
 x = index_mean_RH;
 
+% Load C1 peak latency data
 load ../Data/C1_latency_alltrials.mat
 
 % Sort C1 peak latency data and collect data from high contrast, lower
