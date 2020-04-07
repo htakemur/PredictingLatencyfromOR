@@ -1,6 +1,6 @@
 function s_figure2B
 
-% Create scatter plot for test-retest reproducibility of C1 peak latency in high contrast/lower visual field condition.
+% Create box plot for normalized C1 peak amplitude in each stimulus condition.
 % This script aims to reproduce Figure 2B in a following article: 
 
 % Takemura, H., Yuasa, K. & Amano, K. 
@@ -9,76 +9,34 @@ function s_figure2B
 
 % Hiromasa Takemura, NICT CiNet BIT
 
-% Load Test-Retest Latency data
-load ../Data/C1_latency_testretest.mat
+% Load data
+load ../Data/C1_dipole_timecourse.mat
+load ../Data/C1_latency_alltrials.mat
 
-% Find C1 peak latency data in high contrast, lower visual field (odd
-% trial)
-for kk = 1:20
-    latency_v1_HCD(1,kk) = latency_v1(6,kk); % Left Lower Visual Field, High contrast
-    latency_v1_HCD(2,kk) = latency_v1(8,kk); % Right Lower Visual Field, High contrast
+% Calculate normalized amplitude (normalized to the baseline)
+for j = 1:20
+    for i = 1:8
+        baseline_mean = mean(timecourse(j, 1:200, i)); % Calculate mean amplitude in the baseline period (-200 to -1 ms; before stimulus onset)
+        baseline_std = std(timecourse(j, 1:200, i),0,2); % Standard deviation of response amplitude in the baseline period
+        C1_amplitude(i,j) = timecourse(j, (latency_v1(i,j)+199), i); % Pick amplitude at peak C1 latency
+        C1_amplitude_norm(i,j) = (C1_amplitude(i,j) - baseline_mean)/baseline_std; % Normalize amplitude
+    end
 end
 
-% Average C1 latency in left and right visual field in odd trials
-latency_v1_HCD_odd = nanmedian(latency_v1_HCD,1);
-clear latency_v1_HCD
-
-% Find C1 peak latency data in high contrast, lower visual field (even
-% trial)
-for kk = 1:20
-    latency_v1_HCD(1,kk) = latency_v1(14,kk); % Left Lower Visual Field, High contrast
-    latency_v1_HCD(2,kk) = latency_v1(16,kk); % Right Lower Visual Field, High contrast
-end
-
-% Average C1 latency in left and right visual field in even trials
-latency_v1_HCD_even = nanmedian(latency_v1_HCD,1);
-clear latency_v1_HCD
-
-% Set the limit of scattter plot
-h1.xlim(1) = 60; % X axis, the minimum limit
-h1.xlim(2) = 100; % X axis, the maximum limit
-h1.ylim(1) = 60; % Y axis, the minimum limit
-h1.ylim(2) = 100; % Y axis, the maximum limit
+% Average amplitude in left and right visual field stimulation
+amplitude_plot(1,:) = (C1_amplitude_norm(3,:) + C1_amplitude_norm(1,:))./2;
+amplitude_plot(2,:) = (C1_amplitude_norm(4,:) + C1_amplitude_norm(2,:))./2;
+amplitude_plot(3,:) = (C1_amplitude_norm(7,:) + C1_amplitude_norm(5,:))./2;
+amplitude_plot(4,:) = (C1_amplitude_norm(8,:) + C1_amplitude_norm(6,:))./2;
 
 % Set tick label
-xtick = [60 80 100];
-ytick = [60 80 100];
+ytick = [0 15 30 45];
+h1.ylim(1) = 0; % Y axis, the minimum limit
+h1.ylim(2) = 45; % Y axis, the maximum limit
 
-% Draw scatter plot
-fig = figure;
-hold on
-box off
-plot(latency_v1_HCD_odd,latency_v1_HCD_even, 'Linestyle','none','Marker','o','MarkerEdgeColor','k', 'MarkerFaceColor','none', 'MarkerSize',8);
-set(gca, 'tickdir', 'out', 'box', 'off', 'xlim', h1.xlim,'xtick',xtick, 'ylim', h1.ylim,'ytick',ytick);
+% Creat Box Plot
+boxplot(transpose(amplitude_plot))
+set(gca,'XTickLabel',{'UVF/LowContrast','LVF/LowContrast','UVF/HighContrast','LVF/HighContrast'},'fontsize',10);
+set(gca, 'tickdir', 'out', 'box', 'off',  'ylim', h1.ylim,'ytick',ytick);
 
-% add 95% bootstrap CI
-Critical = 0.05;%critical region
-y = latency_v1_HCD_even';
-x = [ones(size(y)) latency_v1_HCD_odd'];
-b = regress(y,x);
-yfit = x*b;
-repetition = 10000;
-[coefficient index] = bootstrp(...
-         repetition,@regress,y,x);
-xfig = xtick(1):0.001:xtick(end);
-for j =1:length(xfig)
-    for k = 1:repetition
-        y_candi(k) = coefficient(k,2)*xfig(j) + coefficient(k,1);
-    end
-    y_candi_sort = sort(y_candi);
-    y_down(j) = y_candi_sort(repetition*Critical/2);
-    y_up(j) = y_candi_sort(repetition*(1-Critical/2));
-    clear y_candi
-end
-plot(xfig,y_down,'c-','LineWidth',0.2)
-plot(xfig,y_up,'c-','LineWidth',0.2)
-y_hat = @(i) b(2)*i+b(1);
-plot(xfig,y_hat(xfig),'Color','k','LineWidth',2);
-
-% Calculate Test-Retest Reproducubility (Correlation Coefficient, R)
-[r] = corr(transpose(latency_v1_HCD_odd),transpose(latency_v1_HCD_even));
-xlabel('C1 peak latency (odd trials)');
-ylabel('C1 peak latency (even trials)');
-titlelabel = ['Test-Retest R = ' num2str(r)];
-title(titlelabel);
-
+ylabel('Normalized C1 peak amplitude (s.d. from baseline)','fontsize',10);

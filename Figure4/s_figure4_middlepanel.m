@@ -1,9 +1,9 @@
-function s_figure5_middlepanel
+function s_figure4_middlepanel
 
 % (1) Perform prediction for C1 peak latency (lower visual field/lower contrast) from optic radiation data with
 % leave-one-out cross validation. 
 % (2) Create scatter plot between Measured and Predicted C1 peak latency. 
-% This script aims to reproduce Figure 5, middle panel in a following article: 
+% This script aims to reproduce Figure 4, middle panel in a following article: 
 
 % Takemura, H., Yuasa, K. & Amano, K. 
 % Predicting neural response latency of the human early visual cortex from MRI-based tissue measurements of the optic radiation.
@@ -80,4 +80,4 @@ plot(latency_test',predict_y, 'Linestyle','none','Marker','o','MarkerEdgeColor',
 set(gca, 'tickdir', 'out', 'box', 'off', 'xlim', h1.xlim,'xtick',xtick, 'ylim', h1.ylim,'ytick',ytick);
 xlabel('Measured C1 latency (ms)');
 ylabel('Predicted C1 latency (ms)');
-
+axis square

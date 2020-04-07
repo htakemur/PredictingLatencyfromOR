@@ -1,9 +1,9 @@
-function s_figure5_leftpanel
+function s_figure4_rightpanel
 
-% (1) Perform prediction for C1 peak latency (upper visual field/lower contrast) from optic radiation data with
+% (1) Perform prediction for C1 peak latency (upper visual field/higher contrast) from optic radiation data with
 % leave-one-out cross validation. 
 % (2) Create scatter plot between Measured and Predicted C1 peak latency. 
-% This script aims to reproduce Figure 5, left panel in a following article: 
+% This script aims to reproduce Figure 4, right panel in a following article: 
 
 % Takemura, H., Yuasa, K. & Amano, K. 
 % Predicting neural response latency of the human early visual cortex from MRI-based tissue measurements of the optic radiation.
@@ -42,12 +42,12 @@ load ../Data/C1_latency_alltrials.mat
 % Sort C1 peak latency data and collect data from high contrast, lower
 % visual field condition
 for kk = 1:20
-    latency_v1_LCU(1,kk) = latency_v1(1,kk);
-    latency_v1_LCU(2,kk) = latency_v1(3,kk);   
+    latency_v1_HCU(1,kk) = latency_v1(5,kk);
+    latency_v1_HCU(2,kk) = latency_v1(7,kk);   
 end
 
 % Average latency across left and right visual fie;d
-latency_test = nanmedian(latency_v1_LCU,1);
+latency_test = nanmedian(latency_v1_HCU,1);
 
 % Try one-leave-out cross-validation
 for ik = 1:20
@@ -104,3 +104,4 @@ plot(xfig,y_down,'c-','LineWidth',0.2)
 plot(xfig,y_up,'c-','LineWidth',0.2)
 y_hat = @(i) b(2)*i+b(1);
 plot(xfig,y_hat(xfig),'LineWidth',2,'Color','k');
+axis square

@@ -1,6 +1,9 @@
 function s_figure6
 
-% Plot tract profile of the optic radiation.
+% (1) Perform model prediction using a subset of MRI parameters, tract
+% length or cortical thickness of the V1. 
+% (2) Create a bar plot for model prediction performance with bootstrapped
+% confidence interval.
 % This script aims to reproduce Figure 6 in a following article: 
 
 % Takemura, H., Yuasa, K. & Amano, K. 
@@ -9,158 +12,185 @@ function s_figure6
 
 % Hiromasa Takemura, NICT CiNet BIT
 
-% Load C1 peak latency in Lower Visual Field, High Contrast Condition
+%% Load parameters for model prediction
+
+% Load data from left OR
+load ../Data/Left_OR_tractproperty.mat
+
+% Average metrics along OR. For dMRI metric, we average data across two
+% runs.
+index_mean_LH(:,1) = (mean(all_profile.fa1(11:90,:),1) + mean(all_profile.fa2(11:90,:),1))/2;
+index_mean_LH(:,2) = (mean(all_profile.md1(11:90,:),1) + mean(all_profile.md2(11:90,:),1))/2;
+index_mean_LH(:,3) = mean(all_profile.qt1(11:90,:),1);
+index_mean_LH(:,4) = (mean(all_profile.odi1(11:90,:),1) + mean(all_profile.odi2(11:90,:),1))/2;
+index_mean_LH(:,5) = (mean(all_profile.icvf1(11:90,:),1) + mean(all_profile.icvf2(11:90,:),1))/2;
+
+% Load data from right OR
+load  ../Data/Right_OR_tractoproperty.mat
+
+% Average metrics along OR. For dMRI metric, we average data across two
+% runs.
+index_mean_RH(:,1) = (mean(all_profile.fa1(11:90,:),1) + mean(all_profile.fa2(11:90,:),1))/2;
+index_mean_RH(:,2) = (mean(all_profile.md1(11:90,:),1) + mean(all_profile.md2(11:90,:),1))/2;
+index_mean_RH(:,3) = mean(all_profile.qt1(11:90,:),1);
+index_mean_RH(:,4) = (mean(all_profile.odi1(11:90,:),1) + mean(all_profile.odi2(11:90,:),1))/2;
+index_mean_RH(:,5) = (mean(all_profile.icvf1(11:90,:),1) + mean(all_profile.icvf2(11:90,:),1))/2;
+
+% Average across hemisphere to create OR variable for predicting C1 peak
+% latency
+index_mean_LR = (index_mean_LH + index_mean_RH)./2;
+
+% Load OR Streamline length, left hemisphere
+load ../Data/Left_OR_tractlength.mat
+tractmean_LH = tractmean;
+
+% Load OR Streamline length, right hemisphere
+load ../Data/Right_OR_tractlength.mat
+tractmean_RH = tractmean;
+
+% Average across hemispheres
+tractlength = (tractmean_LH + tractmean_RH)./2;
+
+% Load V1 Cortical Thickness
+load ../Data/V1_thickness.mat
+
+% Load C1 Peak Latency
 load ../Data/C1_latency_alltrials.mat
+
+% Sort C1 peak latency data and collect data from high contrast, lower
+% visual field condition
 for kk = 1:20
     latency_v1_HCD(1,kk) = latency_v1(6,kk);
     latency_v1_HCD(2,kk) = latency_v1(8,kk);   
 end
 
-% Average C1 peak latency for left and right visual field stimulation
+% Average latency across left and right visual fie;d
 latency_test = mean(latency_v1_HCD,1);
 
-% Classify subjects into faster and slower C1 peak latency groups
-latency_median = median(latency_test);
-latency_group_fast = find(latency_test < latency_median);
-latency_group_slow = find(latency_test > latency_median);
+%% NODDI + qT1 model
+x(:,1) = index_mean_LR(:,3);
+x(:,2) = index_mean_LR(:,4);
+x(:,3) = index_mean_LR(:,5);
 
-% Load data from left OR
-load ../Data/Left_OR_tractproperty.mat
-index_LH(1:80,:,1) = (all_profile.fa1(11:90,:) + all_profile.fa2(11:90,:))/2;
-index_LH(1:80,:,2) = (all_profile.md1(11:90,:) + all_profile.md2(11:90,:))/2;
-index_LH(1:80,:,3) = (all_profile.odi1(11:90,:) + all_profile.odi2(11:90,:))/2;
-index_LH(1:80,:,4) = (all_profile.icvf1(11:90,:) + all_profile.icvf2(11:90,:))/2;
-
-% Load data from right OR
-load  ../Data/Right_OR_tractoproperty.mat
-index_RH(1:80,:,1) = (all_profile.fa1(11:90,:) + all_profile.fa2(11:90,:))/2;
-index_RH(1:80,:,2) = (all_profile.md1(11:90,:) + all_profile.md2(11:90,:))/2;
-index_RH(1:80,:,3) = (all_profile.odi1(11:90,:) + all_profile.odi2(11:90,:))/2;
-index_RH(1:80,:,4) = (all_profile.icvf1(11:90,:) + all_profile.icvf2(11:90,:))/2;
-
-% Average OR tissue property across hemispheres
-index_value = (index_LH + index_RH)./2;
-
-% Perform t-test
-for pp = 1:4
-[~,p(pp,:),~,tstats{pp}] = ttest2(mean(index_value(:,latency_group_fast,pp),1),mean(index_value(:,latency_group_slow,pp),1));
+% Try one-leave-out cross-validation
+for ik = 1:20
+    x_cv = x;
+    x_cv(ik, :) = [];
+   latency_cv = latency_test;
+   latency_cv(:,ik) = [];
+   mdl_cv{ik} = fitlm(x_cv,transpose(latency_cv));
+   predict_y(ik,1) = mdl_cv{ik}.Coefficients.Estimate(1) + mdl_cv{ik}.Coefficients.Estimate(2)*x(ik,1) + mdl_cv{ik}.Coefficients.Estimate(3)*x(ik,2) + mdl_cv{ik}.Coefficients.Estimate(4)*x(ik,3);
 end
 
-% Plot FA
-index_fast_mean = mean(index_value(:,latency_group_fast,1),2);
-index_slow_mean = mean(index_value(:,latency_group_slow,1),2);
-index_fast_ser = std(index_value(:,latency_group_fast,1),0,2)./sqrt(10);
-index_slow_ser = std(index_value(:,latency_group_slow,1),0,2)./sqrt(10);
+% Calculate cross-validated R
+[corr_mdlcv_orig(1)] = corr(predict_y(:,1), transpose(latency_test));
+clear x x_cv mdl_cv
 
-x = [1:1:80];
-plot(x,index_fast_mean,'color',[0 0 1],'LineWidth',5)
-hold on
-plot(x,index_slow_mean,'color',[1 0 0],'LineWidth',5)
-hold on
-plot(x,index_fast_ser+index_fast_mean,'--','color',[0 0 1],'LineWidth',1)
-hold on
-plot(x,index_fast_mean-index_fast_ser,'--','color',[0 0 1],'LineWidth',1)
-hold on
-plot(x,index_slow_mean+index_fast_ser,'--','color',[1 0 0],'LineWidth',1)
-hold on
-plot(x,index_slow_mean-index_fast_ser,'--','color',[1 0 0],'LineWidth',1)
-hold on
+%% DTI + qT1 model
+x(:,1) = index_mean_LR(:,1);
+x(:,2) = index_mean_LR(:,2);
+x(:,3) = index_mean_LR(:,3);
 
-h1.ylim(1) = 0.3;
-h1.ylim(2) = 0.7;
-    set(gca,'tickdir','out', ...
-        'box','off', ...
-        'ylim',h1.ylim)
-ylabel('Fractional Anisotropy','fontsize',16);
-xlabel('Position','fontsize',16);
+% Try one-leave-out cross-validation
+for ik = 1:20
+    x_cv = x;
+    x_cv(ik, :) = [];
+   latency_cv = latency_test;
+   latency_cv(:,ik) = [];
+   mdl_cv{ik} = fitlm(x_cv,transpose(latency_cv));
+   predict_y(ik,2) = mdl_cv{ik}.Coefficients.Estimate(1) + mdl_cv{ik}.Coefficients.Estimate(2)*x(ik,1) + mdl_cv{ik}.Coefficients.Estimate(3)*x(ik,2) + mdl_cv{ik}.Coefficients.Estimate(4)*x(ik,3);
+end
 
-% Plot MD
-figure(2)
-% Diffusivity is now computed in a unit of mm^2/s. 
-% It is much easier to visualize in a unit of micrometer^2/msec.
-% Therefore, we multiply MD by 1000. 
-index_value(:,:,2) = index_value(:,:,2)*1000;
-index_fast_mean = mean(index_value(:,latency_group_fast,2),2);
-index_slow_mean = mean(index_value(:,latency_group_slow,2),2);
-index_fast_ser = std(index_value(:,latency_group_fast,2),0,2)./sqrt(10);
-index_slow_ser = std(index_value(:,latency_group_slow,2),0,2)./sqrt(10);
+% Calculate cross-validated R
+[corr_mdlcv_orig(2)] = corr(predict_y(:,2), transpose(latency_test));
+clear x x_cv mdl_cv
 
-x = [1:1:80];
-plot(x,index_fast_mean,'color',[0 0 1],'LineWidth',5)
-hold on
-plot(x,index_slow_mean,'color',[1 0 0],'LineWidth',5)
-hold on
-plot(x,index_fast_ser+index_fast_mean,'--','color',[0 0 1],'LineWidth',1)
-hold on
-plot(x,index_fast_mean-index_fast_ser,'--','color',[0 0 1],'LineWidth',1)
-hold on
-plot(x,index_slow_mean+index_fast_ser,'--','color',[1 0 0],'LineWidth',1)
-hold on
-plot(x,index_slow_mean-index_fast_ser,'--','color',[1 0 0],'LineWidth',1)
-hold on
-h1.ylim(1) = 0.6;
-h1.ylim(2) = 0.8;
-    set(gca,'tickdir','out', ...
-        'box','off', ...
-        'ylim',h1.ylim)
-ylabel('Mean Diffusivity','fontsize',16);
-xlabel('Position','fontsize',16);
+%% DTI + NODDI model
+x(:,1) = index_mean_LR(:,1);
+x(:,2) = index_mean_LR(:,2);
+x(:,3) = index_mean_LR(:,4);
+x(:,4) = index_mean_LR(:,5);
 
-% Plot ODI
-figure(3)
-index_fast_mean = mean(index_value(:,latency_group_fast,3),2);
-index_slow_mean = mean(index_value(:,latency_group_slow,3),2);
-index_fast_ser = std(index_value(:,latency_group_fast,3),0,2)./sqrt(10);
-index_slow_ser = std(index_value(:,latency_group_slow,3),0,2)./sqrt(10);
+% Try one-leave-out cross-validation
+for ik = 1:20
+    x_cv = x;
+    x_cv(ik, :) = [];
+   latency_cv = latency_test;
+   latency_cv(:,ik) = [];
+   mdl_cv{ik} = fitlm(x_cv,transpose(latency_cv));
+   predict_y(ik,3) = mdl_cv{ik}.Coefficients.Estimate(1) + mdl_cv{ik}.Coefficients.Estimate(2)*x(ik,1) + mdl_cv{ik}.Coefficients.Estimate(3)*x(ik,2) + mdl_cv{ik}.Coefficients.Estimate(4)*x(ik,3)+ mdl_cv{ik}.Coefficients.Estimate(5)*x(ik,4);
+end
 
-x = [1:1:80];
-plot(x,index_fast_mean,'color',[0 0 1],'LineWidth',5)
-hold on
-plot(x,index_slow_mean,'color',[1 0 0],'LineWidth',5)
-hold on
-plot(x,index_fast_ser+index_fast_mean,'--','color',[0 0 1],'LineWidth',1)
-hold on
-plot(x,index_fast_mean-index_fast_ser,'--','color',[0 0 1],'LineWidth',1)
-hold on
-plot(x,index_slow_mean+index_fast_ser,'--','color',[1 0 0],'LineWidth',1)
-hold on
-plot(x,index_slow_mean-index_fast_ser,'--','color',[1 0 0],'LineWidth',1)
-hold on
+% Calculate cross-validated R
+[corr_mdlcv_orig(3)] = corr(predict_y(:,3), transpose(latency_test));
+clear x x_cv mdl_cv
 
-h1.ylim(1) = 0.1;
-h1.ylim(2) = 0.3;
-    set(gca,'tickdir','out', ...
-        'box','off', ...
-        'ylim',h1.ylim)
-ylabel('Orientation Dispersion Index','fontsize',16);
-xlabel('Position','fontsize',16);
+%% Full model
+x = index_mean_LR;
+% Try one-leave-out cross-validation
+for ik = 1:20
+    x_cv = x;
+    x_cv(ik, :) = [];
+   latency_cv = latency_test;
+   latency_cv(:,ik) = [];
+   mdl_cv{ik} = fitlm(x_cv,transpose(latency_cv));
+   predict_y(ik,4) = mdl_cv{ik}.Coefficients.Estimate(1) + mdl_cv{ik}.Coefficients.Estimate(2)*x(ik,1) + mdl_cv{ik}.Coefficients.Estimate(3)*x(ik,2) + mdl_cv{ik}.Coefficients.Estimate(4)*x(ik,3) + mdl_cv{ik}.Coefficients.Estimate(5)*x(ik,4) + mdl_cv{ik}.Coefficients.Estimate(6)*x(ik,5);
+end
 
-% Plot ICVF
-figure(4)
-index_fast_mean = mean(index_value(:,latency_group_fast,4),2);
-index_slow_mean = mean(index_value(:,latency_group_slow,4),2);
-index_fast_ser = std(index_value(:,latency_group_fast,4),0,2)./sqrt(10);
-index_slow_ser = std(index_value(:,latency_group_slow,4),0,2)./sqrt(10);
+% Calculate cross-validated R
+[corr_mdlcv_orig(4)] = corr(predict_y(:,4), transpose(latency_test));
+clear x x_cv mdl_cv
 
-x = [1:1:80];
+%% Full + Length model
+x(:,1:5) = index_mean_LR;
+x(:,6) = tractlength;
 
-plot(x,index_fast_mean,'color',[0 0 1],'LineWidth',5)
-hold on
-plot(x,index_slow_mean,'color',[1 0 0],'LineWidth',5)
-hold on
-plot(x,index_fast_ser+index_fast_mean,'--','color',[0 0 1],'LineWidth',1)
-hold on
-plot(x,index_fast_mean-index_fast_ser,'--','color',[0 0 1],'LineWidth',1)
-hold on
-plot(x,index_slow_mean+index_fast_ser,'--','color',[1 0 0],'LineWidth',1)
-hold on
-plot(x,index_slow_mean-index_fast_ser,'--','color',[1 0 0],'LineWidth',1)
-hold on
+% Try one-leave-out cross-validation
+for ik = 1:20
+    x_cv = x;
+    x_cv(ik, :) = [];
+   latency_cv = latency_test;
+   latency_cv(:,ik) = [];
+   mdl_cv{ik} = fitlm(x_cv,transpose(latency_cv));
+   predict_y(ik,5) = mdl_cv{ik}.Coefficients.Estimate(1) + mdl_cv{ik}.Coefficients.Estimate(2)*x(ik,1) + mdl_cv{ik}.Coefficients.Estimate(3)*x(ik,2) + mdl_cv{ik}.Coefficients.Estimate(4)*x(ik,3) + mdl_cv{ik}.Coefficients.Estimate(5)*x(ik,4) + mdl_cv{ik}.Coefficients.Estimate(6)*x(ik,5) + mdl_cv{ik}.Coefficients.Estimate(7)*x(ik,6);
+end
 
-h1.ylim(1) = 0.4;
-h1.ylim(2) = 0.6;
-    set(gca,'tickdir','out', ...
-        'box','off', ...
-        'ylim',h1.ylim)
-ylabel('ICVF','fontsize',16);
-xlabel('Position','fontsize',16);
+% Calculate cross-validated R
+[corr_mdlcv_orig(5)] = corr(predict_y(:,5), transpose(latency_test));
+clear x x_cv mdl_cv
+
+%% Full + CT model
+x(:,1:5) = index_mean_LR;
+x(:,6) = transpose(mean_v1_thickness);
+
+% Try one-leave-out cross-validation
+for ik = 1:20
+    x_cv = x;
+    x_cv(ik, :) = [];
+   latency_cv = latency_test;
+   latency_cv(:,ik) = [];
+   mdl_cv{ik} = fitlm(x_cv,transpose(latency_cv));
+   predict_y(ik,6) = mdl_cv{ik}.Coefficients.Estimate(1) + mdl_cv{ik}.Coefficients.Estimate(2)*x(ik,1) + mdl_cv{ik}.Coefficients.Estimate(3)*x(ik,2) + mdl_cv{ik}.Coefficients.Estimate(4)*x(ik,3) + mdl_cv{ik}.Coefficients.Estimate(5)*x(ik,4) + mdl_cv{ik}.Coefficients.Estimate(6)*x(ik,5) + mdl_cv{ik}.Coefficients.Estimate(7)*x(ik,6);
+end
+
+% Calculate cross-validated R
+[corr_mdlcv_orig(6)] = corr(predict_y(:,6), transpose(latency_test));
+clear x x_cv mdl_cv
+
+%% Bootstrapping for estimating 95% confidence interval
+for i = 1:6
+rhos10000{i} = bootstrp(10000, 'corr', transpose(latency_test), predict_y(:,i));
+
+rhos10000_order{i} = sort(rhos10000{i}, 'ascend');
+lowest(i) = rhos10000_order{i}(250);
+highest(i) = rhos10000_order{i}(9750);
+end
+
+%% Plot bar graph
+bar(corr_mdlcv_orig,'FaceColor',[0 0 0]);
+hold on
+er = errorbar(1:6, corr_mdlcv_orig, (corr_mdlcv_orig - lowest), (highest - corr_mdlcv_orig),'LineWidth',2);
+er.LineStyle = 'none';
+er.Color = 'red';
+set(gca,'XTickLabel',{'NODDI+qT1','DTI+qT1','DTI+NODDI','Full','Full+Length','Full+CT'},'fontsize',10);
+ylabel('Model performance (Cross-validated R)','fontsize',10);
