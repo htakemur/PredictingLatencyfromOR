@@ -20,6 +20,7 @@ index_mean_LH(:,2) = (mean(all_profile.md1(11:90,:),1) + mean(all_profile.md2(11
 index_mean_LH(:,3) = mean(all_profile.qt1(11:90,:),1);
 index_mean_LH(:,4) = (mean(all_profile.odi1(11:90,:),1) + mean(all_profile.odi2(11:90,:),1))/2;
 index_mean_LH(:,5) = (mean(all_profile.icvf1(11:90,:),1) + mean(all_profile.icvf2(11:90,:),1))/2;
+clear all_profile
 
 % Load data from right OR
 load ../Data/Right_OR_tractoproperty.mat
@@ -50,4 +51,6 @@ er.Color = 'red';
 er.LineStyle = 'none';
 ylabel('Inter-hemisphere correlation (R)','fontsize',10);
 ylim([0 1]);
+ytick = [0 0.5 1];
 set(gca,'XTickLabel',{'FA','MD','qT1','ODI','ICVF'},'fontsize',10);
+set(gca, 'tickdir', 'out', 'box', 'off',  'ytick',ytick);

@@ -15,8 +15,8 @@ load ../Data/C1_latency_testretest.mat
 % Find C1 peak latency data in high contrast, lower visual field (odd
 % trial)
 for kk = 1:20
-    latency_v1_HCD(1,kk) = latency_v1(6,kk); % Left Lower Visual Field, High contrast
-    latency_v1_HCD(2,kk) = latency_v1(8,kk); % Right Lower Visual Field, High contrast
+    latency_v1_HCD(1,kk) = latency_v1(6,kk); % Left LVF, High contrast
+    latency_v1_HCD(2,kk) = latency_v1(8,kk); % Right LVF, High contrast
 end
 
 % Average C1 latency in left and right visual field in odd trials
@@ -26,8 +26,8 @@ clear latency_v1_HCD
 % Find C1 peak latency data in high contrast, lower visual field (even
 % trial)
 for kk = 1:20
-    latency_v1_HCD(1,kk) = latency_v1(14,kk); % Left Lower Visual Field, High contrast
-    latency_v1_HCD(2,kk) = latency_v1(16,kk); % Right Lower Visual Field, High contrast
+    latency_v1_HCD(1,kk) = latency_v1(14,kk); % Left LVF, High contrast
+    latency_v1_HCD(2,kk) = latency_v1(16,kk); % Right LVF, High contrast
 end
 
 % Average C1 latency in left and right visual field in even trials

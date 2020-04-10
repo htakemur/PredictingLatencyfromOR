@@ -24,10 +24,10 @@ for j = 1:20
 end
 
 % Average amplitude in left and right visual field stimulation
-amplitude_plot(1,:) = (C1_amplitude_norm(3,:) + C1_amplitude_norm(1,:))./2;
-amplitude_plot(2,:) = (C1_amplitude_norm(4,:) + C1_amplitude_norm(2,:))./2;
-amplitude_plot(3,:) = (C1_amplitude_norm(7,:) + C1_amplitude_norm(5,:))./2;
-amplitude_plot(4,:) = (C1_amplitude_norm(8,:) + C1_amplitude_norm(6,:))./2;
+amplitude_plot(1,:) = (C1_amplitude_norm(3,:) + C1_amplitude_norm(1,:))./2; %UVF, low contrast
+amplitude_plot(2,:) = (C1_amplitude_norm(4,:) + C1_amplitude_norm(2,:))./2; %LVF, low contrast
+amplitude_plot(3,:) = (C1_amplitude_norm(7,:) + C1_amplitude_norm(5,:))./2; %UVF, high contrast
+amplitude_plot(4,:) = (C1_amplitude_norm(8,:) + C1_amplitude_norm(6,:))./2; %LVF, high contrast
 
 % Set tick label
 ytick = [0 15 30 45];

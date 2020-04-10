@@ -13,10 +13,10 @@ function s_figure2A
 load ../Data/C1_latency_alltrials.mat
 
 % Average Latency between left and right visual field
-latency_plot(1,:) =(latency_v1(3,:) + latency_v1(1,:))./2;
-latency_plot(2,:) =(latency_v1(4,:) + latency_v1(2,:))./2;
-latency_plot(3,:) =(latency_v1(7,:) + latency_v1(5,:))./2;
-latency_plot(4,:) =(latency_v1(8,:) + latency_v1(6,:))./2;
+latency_plot(1,:) =(latency_v1(3,:) + latency_v1(1,:))./2; %UVF, low contrast
+latency_plot(2,:) =(latency_v1(4,:) + latency_v1(2,:))./2; %LVF, low contrast 
+latency_plot(3,:) =(latency_v1(7,:) + latency_v1(5,:))./2; %UVF, high contrast
+latency_plot(4,:) =(latency_v1(8,:) + latency_v1(6,:))./2; %LVF, high contrast
 
 % Create box plot
 boxplot(transpose(latency_plot))

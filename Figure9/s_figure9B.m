@@ -17,6 +17,8 @@ load ../Data/C1_latency_alltrials.mat
 xtick = [60 80 100];
 ytick = [60 80 100];%degree
 
+% Plot C1 peak latency on left LVF/high contrast (horizontal axis) and
+% right LVF/high contrast (vertical axis)
 scatter(transpose(latency_v1(6,:)),transpose(latency_v1(8,:)),'MarkerEdgeColor',[0 0 0]);
 xlim([60 100])
 ylim([60 100])
