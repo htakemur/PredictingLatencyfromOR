@@ -12,8 +12,8 @@ function s_figure5
 % Load C1 peak latency in Lower Visual Field, High Contrast Condition
 load ../Data/C1_latency_alltrials.mat
 for kk = 1:20
-    latency_v1_HCD(1,kk) = latency_v1(6,kk);
-    latency_v1_HCD(2,kk) = latency_v1(8,kk);   
+    latency_v1_HCD(1,kk) = latency_v1(6,kk); %Left LVF, high contrast
+    latency_v1_HCD(2,kk) = latency_v1(8,kk); %Right LVF, high contrast  
 end
 
 % Average C1 peak latency for left and right visual field stimulation
@@ -30,7 +30,7 @@ index_LH(1:80,:,1) = (all_profile.fa1(11:90,:) + all_profile.fa2(11:90,:))/2;
 index_LH(1:80,:,2) = (all_profile.md1(11:90,:) + all_profile.md2(11:90,:))/2;
 index_LH(1:80,:,3) = (all_profile.odi1(11:90,:) + all_profile.odi2(11:90,:))/2;
 index_LH(1:80,:,4) = (all_profile.icvf1(11:90,:) + all_profile.icvf2(11:90,:))/2;
-
+clear all_profile
 % Load data from right OR
 load  ../Data/Right_OR_tractoproperty.mat
 index_RH(1:80,:,1) = (all_profile.fa1(11:90,:) + all_profile.fa2(11:90,:))/2;

@@ -24,6 +24,7 @@ index_mean_LH(:,2) = (mean(all_profile.md1(11:90,:),1) + mean(all_profile.md2(11
 index_mean_LH(:,3) = mean(all_profile.qt1(11:90,:),1);
 index_mean_LH(:,4) = (mean(all_profile.odi1(11:90,:),1) + mean(all_profile.odi2(11:90,:),1))/2;
 index_mean_LH(:,5) = (mean(all_profile.icvf1(11:90,:),1) + mean(all_profile.icvf2(11:90,:),1))/2;
+clear all_profile
 
 % Load data from right OR
 load  ../Data/Right_OR_tractoproperty.mat
@@ -60,11 +61,11 @@ load ../Data/C1_latency_alltrials.mat
 % Sort C1 peak latency data and collect data from high contrast, lower
 % visual field condition
 for kk = 1:20
-    latency_v1_HCD(1,kk) = latency_v1(6,kk);
-    latency_v1_HCD(2,kk) = latency_v1(8,kk);   
+    latency_v1_HCD(1,kk) = latency_v1(6,kk); %Left LVF, high contrast
+    latency_v1_HCD(2,kk) = latency_v1(8,kk); %Right LVF, high contrast  
 end
 
-% Average latency across left and right visual fie;d
+% Average latency across left and right visual field
 latency_test = mean(latency_v1_HCD,1);
 
 %% NODDI + qT1 model
@@ -141,7 +142,7 @@ end
 [corr_mdlcv_orig(4)] = corr(predict_y(:,4), transpose(latency_test));
 clear x x_cv mdl_cv
 
-%% Full + Length model
+%% Full + tract length model
 x(:,1:5) = index_mean_LR;
 x(:,6) = tractlength;
 
@@ -159,7 +160,7 @@ end
 [corr_mdlcv_orig(5)] = corr(predict_y(:,5), transpose(latency_test));
 clear x x_cv mdl_cv
 
-%% Full + CT model
+%% Full + V1 CT model
 x(:,1:5) = index_mean_LR;
 x(:,6) = transpose(mean_v1_thickness);
 
@@ -192,5 +193,5 @@ hold on
 er = errorbar(1:6, corr_mdlcv_orig, (corr_mdlcv_orig - lowest), (highest - corr_mdlcv_orig),'LineWidth',2);
 er.LineStyle = 'none';
 er.Color = 'red';
-set(gca,'XTickLabel',{'NODDI+qT1','DTI+qT1','DTI+NODDI','Full','Full+Length','Full+CT'},'fontsize',10);
+set(gca,'XTickLabel',{'NODDI+qT1','DTI+qT1','DTI+NODDI','Full','Full+tract length','Full+V1 CT'},'fontsize',10);
 ylabel('Model performance (Cross-validated R)','fontsize',10);

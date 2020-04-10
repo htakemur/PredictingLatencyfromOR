@@ -30,7 +30,7 @@ load ../Data/C1_latency_alltrials.mat
 
 % Sort C1 peak latency data and collect data from high contrast, lower
 % left visual field condition
-latency_test = latency_v1(6,:);
+latency_test = latency_v1(6,:);%Left LVF, high contrast
 
 % Try one-leave-out cross-validation
 for ik = 1:20
