@@ -21,7 +21,7 @@ index_mean_LH(:,2) = (mean(all_profile.md1(11:90,:),1) + mean(all_profile.md2(11
 index_mean_LH(:,3) = mean(all_profile.qt1(11:90,:),1);
 index_mean_LH(:,4) = (mean(all_profile.odi1(11:90,:),1) + mean(all_profile.odi2(11:90,:),1))/2;
 index_mean_LH(:,5) = (mean(all_profile.icvf1(11:90,:),1) + mean(all_profile.icvf2(11:90,:),1))/2;
-
+clear all_profile
 % Load data from right OR
 load  ../Data/Right_OR_tractoproperty.mat
 
@@ -39,11 +39,11 @@ x = (index_mean_LH + index_mean_RH)./2;
 
 load ../Data/C1_latency_alltrials.mat
 
-% Sort C1 peak latency data and collect data from high contrast, lower
+% Sort C1 peak latency data and collect data from low contrast, lower
 % visual field condition
 for kk = 1:20
-    latency_v1_LCD(1,kk) = latency_v1(2,kk);
-    latency_v1_LCD(2,kk) = latency_v1(4,kk);   
+    latency_v1_LCD(1,kk) = latency_v1(2,kk); %Left LVF, low contrast
+    latency_v1_LCD(2,kk) = latency_v1(4,kk); %Right LVF, low contrast  
 end
 
 % Average latency across left and right visual fie;d
