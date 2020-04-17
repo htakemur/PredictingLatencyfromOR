@@ -82,27 +82,11 @@ set(gca, 'tickdir', 'out', 'box', 'off', 'xlim', h1.xlim,'xtick',xtick, 'ylim', 
 xlabel('Measured C1 latency (ms)');
 ylabel('Predicted C1 latency (ms)');
 
-% Add 95% bootstrap Confidence interval
-Critical = 0.05;%critical region
+% Add regression line
 y = predict_y';
 x = [ones(size(y)) latency_test'];
 b = regress(y,x);
-yfit = x*b;
-repetition = 10000;
-[coefficient index] = bootstrp(...
-         repetition,@regress,y,x);
 xfig = xtick(1):0.001:xtick(end);
-for j =1:length(xfig)
-    for k = 1:repetition
-        y_candi(k) = coefficient(k,2)*xfig(j) + coefficient(k,1);
-    end
-    y_candi_sort = sort(y_candi);
-    y_down(j) = y_candi_sort(repetition*Critical/2);
-    y_up(j) = y_candi_sort(repetition*(1-Critical/2));
-    clear y_candi
-end
-plot(xfig,y_down,'c-','LineWidth',0.2)
-plot(xfig,y_up,'c-','LineWidth',0.2)
 y_hat = @(i) b(2)*i+b(1);
 plot(xfig,y_hat(xfig),'LineWidth',2,'Color','k');
 axis square

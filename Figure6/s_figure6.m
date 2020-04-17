@@ -178,20 +178,9 @@ end
 [corr_mdlcv_orig(6)] = corr(predict_y(:,6), transpose(latency_test));
 clear x x_cv mdl_cv
 
-%% Bootstrapping for estimating 95% confidence interval
-for i = 1:6
-rhos10000{i} = bootstrp(10000, 'corr', transpose(latency_test), predict_y(:,i));
-
-rhos10000_order{i} = sort(rhos10000{i}, 'ascend');
-lowest(i) = rhos10000_order{i}(250);
-highest(i) = rhos10000_order{i}(9750);
-end
 
 %% Plot bar graph
 bar(corr_mdlcv_orig,'FaceColor',[0 0 0]);
 hold on
-er = errorbar(1:6, corr_mdlcv_orig, (corr_mdlcv_orig - lowest), (highest - corr_mdlcv_orig),'LineWidth',2);
-er.LineStyle = 'none';
-er.Color = 'red';
 set(gca,'XTickLabel',{'NODDI+qT1','DTI+qT1','DTI+NODDI','Full','Full+tract length','Full+V1 CT'},'fontsize',10);
 ylabel('Model performance (Cross-validated R)','fontsize',10);
