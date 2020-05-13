@@ -14,4 +14,5 @@ Hiromasa Takemura
 Center for Information and Neural Networks (CiNet),
 National Institute of Information and Communications Technology
 
-htakemur@nict.go.jp
+E-Mail: htakemur [XXX] nict.go.jp
+* Replace [XXX] to @
