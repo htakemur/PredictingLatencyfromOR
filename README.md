@@ -1,6 +1,6 @@
 # PredictingLatencyfromOR
 
-This repository houses code for reproducing Figures and statistical analyses performed in the following paper.
+This repository houses code for reproducing figures and statistical analyses performed in the following paper.
 
 Takemura, H., Yuasa, K. & Amano, K. (in press) Predicting neural response latency of the human early visual cortex from MRI-based tissue measurements of the optic radiation. eNeuro. 
 
