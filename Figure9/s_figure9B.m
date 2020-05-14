@@ -4,9 +4,9 @@ function s_figure9B
 % stimulation (high contrast, lower visual field)
 % This script aims to reproduce Figure 9B in a following article: 
 
-% Takemura, H., Yuasa, K. & Amano, K. 
+% Takemura, H., Yuasa, K. & Amano, K. (2020)
 % Predicting neural response latency of the human early visual cortex from MRI-based tissue measurements of the optic radiation.
-% Under Review at eNeuro.
+% eNeuro.
 
 % Hiromasa Takemura, NICT CiNet BIT
 

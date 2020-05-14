@@ -3,9 +3,9 @@ function CheckerboardExperiment
 % This code aims to reproduce stimuli used in MEG experiment in a following
 % article:
 %
-% Takemura, H., Yuasa, K. & Amano, K. 
+% Takemura, H., Yuasa, K. & Amano, K. (2020)
 % Predicting neural response latency of the human early visual cortex from MRI-based tissue measurements of the optic radiation.
-% Under Review at eNeuro.
+% eNeuro.
 %
 % Dependency:
 % This code requires following MATLAB toolbox:

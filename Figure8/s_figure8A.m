@@ -5,9 +5,9 @@ function s_figure8A
 % (2) Create scatter plot between Measured and Predicted C1 peak latency. 
 % This script aims to reproduce Figure 8A in a following article: 
 
-% Takemura, H., Yuasa, K. & Amano, K. 
+% Takemura, H., Yuasa, K. & Amano, K. (2020)
 % Predicting neural response latency of the human early visual cortex from MRI-based tissue measurements of the optic radiation.
-% Under Review at eNeuro.
+% eNeuro.
 
 % Hiromasa Takemura, NICT CiNet BIT
 

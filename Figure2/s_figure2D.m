@@ -3,9 +3,9 @@ function s_figure2D
 % Create bar plot for test-retest reproducibility of C1 peak latency in each stimulus condition.
 % This script aims to reproduce Figure 2D in a following article: 
 
-% Takemura, H., Yuasa, K. & Amano, K. 
+% Takemura, H., Yuasa, K. & Amano, K. (2020)
 % Predicting neural response latency of the human early visual cortex from MRI-based tissue measurements of the optic radiation.
-% Under Review at eNeuro.
+% eNeuro.
 
 % Hiromasa Takemura, NICT CiNet BIT
 
