@@ -18,6 +18,17 @@ latency_plot(2,:) =(latency_v1(4,:) + latency_v1(2,:))./2; %LVF, low contrast
 latency_plot(3,:) =(latency_v1(7,:) + latency_v1(5,:))./2; %UVF, high contrast
 latency_plot(4,:) =(latency_v1(8,:) + latency_v1(6,:))./2; %LVF, high contrast
 
+% Calculate summary statistics in each condition
+latency_median = median(latency_plot, 2);
+latency_std = std(latency_plot, 0, 2);
+
+% Quantify correlation between latency and age
+age = [23 26 22 24 25 22 38 28 31 25 23 38 53 22 34 35 29 22 21 31];
+
+for i =1:4
+   [r_age(i), p_age(i)] = corr(transpose(age), transpose(latency_plot(i,:))); 
+end
+
 % Create box plot
 boxplot(transpose(latency_plot))
 set(gca,'XTickLabel',{'UVF/LowContrast','LVF/LowContrast','UVF/HighContrast','LVF/HighContrast'},'fontsize',10);
