@@ -67,5 +67,5 @@ er.Color = 'red';
 er.LineStyle = 'none';
 ytick = [0 0.2 0.4 0.6 0.8 1];
 set(gca, 'tickdir', 'out', 'box', 'off', 'ytick',ytick);
-set(gca,'XTickLabel',{'UVF/LowContrast','LVF/LowContrast','UVF/HighContrast','LVF/HighContrast'},'fontsize',10);
+set(gca,'XTickLabel',{'UVF/low-contrast','LVF/low-contrast','UVF/high-contrast','LVF/high-contrast'},'fontsize',10);
 ylabel('Test-Retest reproducibility (R)','fontsize',10);

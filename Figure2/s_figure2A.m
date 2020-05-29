@@ -31,5 +31,5 @@ end
 
 % Create box plot
 boxplot(transpose(latency_plot))
-set(gca,'XTickLabel',{'UVF/LowContrast','LVF/LowContrast','UVF/HighContrast','LVF/HighContrast'},'fontsize',10);
+set(gca,'XTickLabel',{'UVF/low-contrast','LVF/low-contrast','UVF/high-contrast','LVF/high-contrast'},'fontsize',10);
    ylabel('C1 latency (ms)','fontsize',10);

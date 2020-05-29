@@ -36,7 +36,7 @@ h1.ylim(2) = 45; % Y axis, the maximum limit
 
 % Creat Box Plot
 boxplot(transpose(amplitude_plot))
-set(gca,'XTickLabel',{'UVF/LowContrast','LVF/LowContrast','UVF/HighContrast','LVF/HighContrast'},'fontsize',10);
+set(gca,'XTickLabel',{'UVF/low-contrast','LVF/low-contrast','UVF/high-contrast','LVF/high-contrast'},'fontsize',10);
 set(gca, 'tickdir', 'out', 'box', 'off',  'ylim', h1.ylim,'ytick',ytick);
 
 ylabel('Normalized C1 peak amplitude (s.d. from baseline)','fontsize',10);
