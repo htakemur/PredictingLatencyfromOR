@@ -18,9 +18,10 @@ load ../Data/Left_CST_tractproperty.mat
 % runs.
 index_mean_LH(:,1) = (mean(all_profile.fa1(11:90,:),1) + mean(all_profile.fa2(11:90,:),1))/2;
 index_mean_LH(:,2) = (mean(all_profile.md1(11:90,:),1) + mean(all_profile.md2(11:90,:),1))/2;
-index_mean_LH(:,3) = mean(all_profile.qt1(11:90,:),1);
-index_mean_LH(:,4) = (mean(all_profile.odi1(11:90,:),1) + mean(all_profile.odi2(11:90,:),1))/2;
-index_mean_LH(:,5) = (mean(all_profile.icvf1(11:90,:),1) + mean(all_profile.icvf2(11:90,:),1))/2;
+index_mean_LH(:,3) = (mean(all_profile.odi1(11:90,:),1) + mean(all_profile.odi2(11:90,:),1))/2;
+index_mean_LH(:,4) = (mean(all_profile.icvf1(11:90,:),1) + mean(all_profile.icvf2(11:90,:),1))/2;
+index_mean_LH(:,5) = mean(all_profile.qt1(11:90,:),1);
+
 clear all_profile
 % Load data from right CST
 load  ../Data/Right_CST_tractproperty.mat
@@ -29,9 +30,9 @@ load  ../Data/Right_CST_tractproperty.mat
 % runs.
 index_mean_RH(:,1) = (mean(all_profile.fa1(11:90,:),1) + mean(all_profile.fa2(11:90,:),1))/2;
 index_mean_RH(:,2) = (mean(all_profile.md1(11:90,:),1) + mean(all_profile.md2(11:90,:),1))/2;
-index_mean_RH(:,3) = mean(all_profile.qt1(11:90,:),1);
-index_mean_RH(:,4) = (mean(all_profile.odi1(11:90,:),1) + mean(all_profile.odi2(11:90,:),1))/2;
-index_mean_RH(:,5) = (mean(all_profile.icvf1(11:90,:),1) + mean(all_profile.icvf2(11:90,:),1))/2;
+index_mean_RH(:,3) = (mean(all_profile.odi1(11:90,:),1) + mean(all_profile.odi2(11:90,:),1))/2;
+index_mean_RH(:,4) = (mean(all_profile.icvf1(11:90,:),1) + mean(all_profile.icvf2(11:90,:),1))/2;
+index_mean_RH(:,5) = mean(all_profile.qt1(11:90,:),1);
 
 % Average across hemisphere to create CST variable for predicting C1 peak
 % latency

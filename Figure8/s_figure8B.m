@@ -18,9 +18,9 @@ load ../Data/Right_OR_tractoproperty.mat
 % runs.
 index_mean_RH(:,1) = (mean(all_profile.fa1(11:90,:),1) + mean(all_profile.fa2(11:90,:),1))/2;
 index_mean_RH(:,2) = (mean(all_profile.md1(11:90,:),1) + mean(all_profile.md2(11:90,:),1))/2;
-index_mean_RH(:,3) = mean(all_profile.qt1(11:90,:),1);
-index_mean_RH(:,4) = (mean(all_profile.odi1(11:90,:),1) + mean(all_profile.odi2(11:90,:),1))/2;
-index_mean_RH(:,5) = (mean(all_profile.icvf1(11:90,:),1) + mean(all_profile.icvf2(11:90,:),1))/2;
+index_mean_RH(:,3) = (mean(all_profile.odi1(11:90,:),1) + mean(all_profile.odi2(11:90,:),1))/2;
+index_mean_RH(:,4) = (mean(all_profile.icvf1(11:90,:),1) + mean(all_profile.icvf2(11:90,:),1))/2;
+index_mean_RH(:,5) = mean(all_profile.qt1(11:90,:),1);
 
 % Use right OR data for predicting C1 peak latency
 x = index_mean_RH;

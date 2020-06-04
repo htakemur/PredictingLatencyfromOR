@@ -21,9 +21,10 @@ load ../Data/Left_OR_tractproperty.mat
 % runs.
 index_mean_LH(:,1) = (mean(all_profile.fa1(11:90,:),1) + mean(all_profile.fa2(11:90,:),1))/2;
 index_mean_LH(:,2) = (mean(all_profile.md1(11:90,:),1) + mean(all_profile.md2(11:90,:),1))/2;
-index_mean_LH(:,3) = mean(all_profile.qt1(11:90,:),1);
-index_mean_LH(:,4) = (mean(all_profile.odi1(11:90,:),1) + mean(all_profile.odi2(11:90,:),1))/2;
-index_mean_LH(:,5) = (mean(all_profile.icvf1(11:90,:),1) + mean(all_profile.icvf2(11:90,:),1))/2;
+index_mean_LH(:,3) = (mean(all_profile.odi1(11:90,:),1) + mean(all_profile.odi2(11:90,:),1))/2;
+index_mean_LH(:,4) = (mean(all_profile.icvf1(11:90,:),1) + mean(all_profile.icvf2(11:90,:),1))/2;
+index_mean_LH(:,5) = mean(all_profile.qt1(11:90,:),1);
+
 clear all_profile
 
 % Load data from right OR
@@ -33,9 +34,9 @@ load  ../Data/Right_OR_tractoproperty.mat
 % runs.
 index_mean_RH(:,1) = (mean(all_profile.fa1(11:90,:),1) + mean(all_profile.fa2(11:90,:),1))/2;
 index_mean_RH(:,2) = (mean(all_profile.md1(11:90,:),1) + mean(all_profile.md2(11:90,:),1))/2;
-index_mean_RH(:,3) = mean(all_profile.qt1(11:90,:),1);
-index_mean_RH(:,4) = (mean(all_profile.odi1(11:90,:),1) + mean(all_profile.odi2(11:90,:),1))/2;
-index_mean_RH(:,5) = (mean(all_profile.icvf1(11:90,:),1) + mean(all_profile.icvf2(11:90,:),1))/2;
+index_mean_RH(:,3) = (mean(all_profile.odi1(11:90,:),1) + mean(all_profile.odi2(11:90,:),1))/2;
+index_mean_RH(:,4) = (mean(all_profile.icvf1(11:90,:),1) + mean(all_profile.icvf2(11:90,:),1))/2;
+index_mean_RH(:,5) = mean(all_profile.qt1(11:90,:),1);
 
 % Average across hemisphere to create OR variable for predicting C1 peak
 % latency
@@ -90,7 +91,7 @@ clear x x_cv mdl_cv
 %% DTI + qT1 model
 x(:,1) = index_mean_LR(:,1);
 x(:,2) = index_mean_LR(:,2);
-x(:,3) = index_mean_LR(:,3);
+x(:,3) = index_mean_LR(:,5);
 
 % Try one-leave-out cross-validation
 for ik = 1:20
@@ -109,8 +110,8 @@ clear x x_cv mdl_cv
 %% DTI + NODDI model
 x(:,1) = index_mean_LR(:,1);
 x(:,2) = index_mean_LR(:,2);
-x(:,3) = index_mean_LR(:,4);
-x(:,4) = index_mean_LR(:,5);
+x(:,3) = index_mean_LR(:,3);
+x(:,4) = index_mean_LR(:,4);
 
 % Try one-leave-out cross-validation
 for ik = 1:20
@@ -184,3 +185,4 @@ bar(corr_mdlcv_orig,'FaceColor',[0 0 0]);
 hold on
 set(gca,'XTickLabel',{'NODDI+qT1','DTI+qT1','DTI+NODDI','Full','Full+tract length','Full+V1 CT'},'fontsize',10);
 ylabel('Model performance (Cross-validated R)','fontsize',10);
+set(gca, 'tickdir', 'out', 'box', 'off');
