@@ -7,7 +7,7 @@ function s_figure8B
 
 % Takemura, H., Yuasa, K. & Amano, K. (2020)
 % Predicting neural response latency of the human early visual cortex from MRI-based tissue measurements of the optic radiation.
-% eNeuro.
+% eNeuro, 7(4), ENEURO.0545-19.2020; DOI: https://doi.org/10.1523/ENEURO.0545-19.2020 
 
 % Hiromasa Takemura, NICT CiNet BIT
 
